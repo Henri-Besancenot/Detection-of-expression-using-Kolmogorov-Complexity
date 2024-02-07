@@ -7,6 +7,7 @@
 
 import zipfile
 import os
+import shutil
 
 def zip_files(file1,zip_filename,file2=None):
     #programm that zip two files in a same zip folder
@@ -37,12 +38,30 @@ def delete_file(file_path):
     except PermissionError:
         print(f"Permission denied to delete file '{file_path}'.")
 
+def copy_file(source_file, destination_file):
+    try:
+        shutil.copy2(source_file, destination_file)
+        print(f"File '{source_file}' copied to '{destination_file}' successfully.")
+    except FileNotFoundError:
+        print(f"Source file '{source_file}' not found.")
+    except PermissionError:
+        print(f"Permission denied to copy file '{source_file}'.")
+
 def Z(file1,file2 = None):
     create_empty_zip('temp') #creates a temporary zip file
     zip_files(file1,'temp',file2,) #compresses given files into this folder
     Z = get_file_size('temp') # gives the size of the zipped folder
     delete_file('temp') #suppresses the zip file
     return Z
+
+def Zopti(file1,file2):
+    copy_file(file1,'temp')
+    with zipfile.ZipFile('temp', 'w') as zipf:
+        zipf.write(file2)
+    Z = get_file_size('temp')
+    delete_file('temp')
+    return Z
+
 
 def NCD(file1,file2):
     Z1 = Z(file1)
@@ -51,4 +70,13 @@ def NCD(file1,file2):
     Zmax = max(Z1,Z2)
     Z12 = Z(file1,file2)
     return(Z12-Zmin)/Zmax
+
+def NCDopti(file1,file2):
+    Z1 = get_file_size(file1)
+    Z2 = Z(file2)
+    Zmin = min(Z1,Z2)
+    Zmax = max(Z1,Z2)
+
+
+
 ##
