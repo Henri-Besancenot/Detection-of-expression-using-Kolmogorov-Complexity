@@ -56,7 +56,7 @@ def Z(file1,file2 = None):
 
 def Zopti(file1,file2):
     copy_file(file1,'temp')
-    with zipfile.ZipFile('temp', 'w') as zipf:
+    with zipfile.ZipFile('temp', 'a') as zipf:
         zipf.write(file2)
     Z = get_file_size('temp')
     delete_file('temp')
@@ -76,6 +76,8 @@ def NCDopti(file1,file2):
     Z2 = Z(file2)
     Zmin = min(Z1,Z2)
     Zmax = max(Z1,Z2)
+    Z12 = Zopti(file1,file2)
+    return(Z12-Zmin)/Zmax
 
 
 
