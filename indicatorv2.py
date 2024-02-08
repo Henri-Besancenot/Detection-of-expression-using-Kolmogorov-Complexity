@@ -8,9 +8,9 @@ def Z(list_images:list[str]|str)->int:
 def NCD(list_image_1, list_image_2):
     if type(list_image_1) is str : list_image_1 = [list_image_1]
     if type(list_image_2) is str : list_image_2 = [list_image_2]
-
+    
     Z_1 = Z(list_image_1)
     Z_2 = Z(list_image_2)
-    Z_12 = Z(list_image_1 + list_image_2)
+    Z_12 = min(Z(list_image_1 + list_image_2), Z(list_image_2 + list_image_1))
     return (Z_12 - min(Z_1, Z_2))/max(Z_1,Z_2)
 
