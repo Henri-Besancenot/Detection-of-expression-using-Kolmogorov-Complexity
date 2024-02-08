@@ -10,6 +10,7 @@ import zlib
 import os
 import shutil
 
+
 def zip_two_files(file1:str,zip_filename:str,file2=None)->None:
     # programm that zip two files in a same zip folder
     # Not that zip_filename shoud end with .zip
