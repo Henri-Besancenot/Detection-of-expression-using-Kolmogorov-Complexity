@@ -28,9 +28,6 @@ def print_tuple_list(tuple_list):
         print(f"{elem[0]} -> {elem[1]}")
 
 
-
-
 if __name__ == "__main__":
     matrice = NCD.load("matrice_NCD")
-
-    print_tuple_list(get_ordre_by_stat(matrice, "", 0))
+    print_tuple_list(get_ordre_by_stat(matrice, "anger", 0))

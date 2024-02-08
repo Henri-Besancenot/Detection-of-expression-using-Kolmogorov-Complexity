@@ -13,7 +13,7 @@ def is_emotion(file, emotion):
 def guess_emotion(file):
     l_guess = [(emotion, is_emotion(file,emotion)) for emotion in os.listdir("./test")]
     l_guess.sort(key=lambda a: a[1], reverse = True)
-    return [guess for (guess,ncd) in l_guess]
+    return [guess for (guess, _) in l_guess]
 
 def compute_NCD_Emotion_comp(emotion_input, emotion_comp, show = False):
     """

@@ -55,7 +55,13 @@ def copy_file(source_file, destination_file):
 
 
 
+
 if __name__ == "__main__":
-    disgust_data = images_byte_concat([f"./train/disgust/{fname}" for fname in os.listdir("./train/disgust")])
-    print("Taille de disgust = ", get_data_size(disgust_data))
-    print("Taille compressée = ", get_data_size(compress_bytes(disgust_data)))
+    for emotion in os.listdir("./train"):
+        print(f"========== {emotion.upper()} ==========")
+        data = images_byte_concat([f"./train/{emotion}/{fname}" for fname in os.listdir(f"./train/{emotion}")])
+        size = get_data_size(data)
+        zip_size = get_data_size(compress_bytes(data))
+        print("SIZE = ", size)
+        print("ZIP SIZE = ", zip_size)
+        print(f"SIZE GAINED = {size-zip_size}")
