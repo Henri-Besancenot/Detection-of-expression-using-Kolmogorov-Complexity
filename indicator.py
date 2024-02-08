@@ -1,45 +1,16 @@
-import file_manipulation as fm
+import data_manipulation as dm
 
-def Z(list_files:list[str])-> int:
-    """
-    :param list_files:
-    :return: The size of the Zip version of the file containing all the ones present in list_files
-    """
-    fm.zip_two_files(list_files,"temp.zip")
-    Z = fm.get_file_size("temp.zip")
-    fm.delete_file("temp.zip")
-    return Z
+def Z(list_images:list[str]|str)->int:
+    if type(list_images) is str : list_images = [list_images]
+    data_images = dm.images_byte_concat(list_images)
+    return len(dm.compress_bytes(data_images))
 
+def NCD(list_image_1, list_image_2):
+    if type(list_image_1) is str : list_image_1 = [list_image_1]
+    if type(list_image_2) is str : list_image_2 = [list_image_2]
+    
+    Z_1 = Z(list_image_1)
+    Z_2 = Z(list_image_2)
+    Z_12 = min(Z(list_image_1 + list_image_2), Z(list_image_2 + list_image_1))
+    return (Z_12 - min(Z_1, Z_2))/max(Z_1,Z_2)
 
-def Z_opti(file1,file2):
-    fm.copy_file(file1,'temp.zip')
-    with fm.zipfile.ZipFile('temp.zip', 'a') as zipf:
-        zipf.write(file2)
-    Z = fm.get_file_size('temp.zip')
-    fm.delete_file('temp.zip')
-    return Z
-
-
-def NCD(file1,file2):
-    Z1 = Z(file1)
-    Z2 = Z(file2)
-    Zmin = min(Z1,Z2)
-    Zmax = max(Z1,Z2)
-    Z12 = Z([file1,file2])
-    return (Z12-Zmin)/Zmax
-
-
-def NCD_G(list_file1, list_file2):
-    Z1 = Z(list_file1)
-    Z2 = Z(list_file2)
-    Z12 = Z(list_file1+list_file2)
-    return (Z12 - min(Z1, Z2))/max(Z1,Z2)
-
-
-def NCD_opti(file1,file2):
-    Z1 = fm.get_file_size(file1)
-    Z2 = Z(file2)
-    Zmin = min(Z1,Z2)
-    Zmax = max(Z1,Z2)
-    Z12 = Z_opti(file1,file2)
-    return (Z12-Zmin)/Zmax

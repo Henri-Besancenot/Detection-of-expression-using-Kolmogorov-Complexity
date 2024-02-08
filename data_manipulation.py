@@ -19,7 +19,6 @@ def compress_bytes(data):
 def get_data_size(data):
     return len(data)
 
-
 def get_folder_size(folder_path:str)->int:
     """
     :param folder_path: Le chemin d'un fichier

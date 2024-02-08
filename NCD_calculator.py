@@ -1,14 +1,19 @@
-import indicatorv2 as ind
+import indicator as ind
 import os
 import statistics
 import pickle
-
+import time
 # CREATION ET CALCUL DES DONNEES
 
 def is_emotion(file, emotion):
     dir_emotion_path = os.path.join("./train", emotion)
     list_image_emotion = [os.path.join(dir_emotion_path, fname) for fname in os.listdir(dir_emotion_path)] 
     return ind.NCD(file, list_image_emotion)
+
+def guess_emotion(file):
+    l_guess = [(emotion, is_emotion(file,emotion)) for emotion in os.listdir("./test")]
+    l_guess.sort(key=lambda a: a[1], reverse = True)
+    return [guess for (guess,ncd) in l_guess]
 
 def compute_NCD_Emotion_comp(emotion_input, emotion_comp, show = False):
     """
@@ -59,12 +64,18 @@ def get_matrice_NCD():
     total = len(emotion_list)**2
     for emotion_input in emotion_list:
         for emotion_comp in emotion_list:
-            matrice_NCD[emotion_input] = (emotion_comp, compute_NCD_Emotion_comp(emotion_input, emotion_comp))
+            matrice_NCD[emotion_input][emotion_comp] = compute_NCD_Emotion_comp(emotion_input, emotion_comp)
             print(f"{i}/{total} : {emotion_input} -> {emotion_comp} done.")
             i+=1
     return matrice_NCD
 
-
+def compute_and_stock_matrice_NCD():
+    print("========== DEBUT DU CALCUL DE LA MATRICE ==========")
+    matrice_NCD = get_matrice_NCD()
+    print("========== FIN DU CALCUL DE LA MATRICE ==========")
+    print("========== STOCKAGE DE LA MATRICE ==========")
+    stock(matrice_NCD, "matrice_NCD")
+    print("========== STOCKAGE TERMINE ==========")
 
 # STOCKAGE DES DONNEES
 
@@ -78,9 +89,8 @@ def load(file_name):
 
 
 if __name__ == "__main__":
-    print("========== DEBUT DU CALCUL DE LA MATRICE ==========")
-    matrice_NCD = get_matrice_NCD()
-    print("========== FIN DU CALCUL DE LA MATRICE ==========")
-    print("========== STOCKAGE DE LA MATRICE ==========")
-    stock(matrice_NCD, "matrice_NCD")
-    print("========== STOCKAGE TERMINE ==========")
+    emotion = "anger"
+    for file in os.listdir(f"./test/{emotion}"):
+        guess_list= guess_emotion(f"./test/{emotion}/"+file)
+        print(guess_list)
+        if guess_list[0] != emotion: print(file)
